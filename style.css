@@ -17,15 +17,9 @@ nav a {
     text-decoration: none;
 }
 
-.container {
+main {
     max-width: 800px;
     margin: 2rem auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-}
-
-.section {
     background-color: white;
     padding: 2rem;
 }
@@ -36,6 +30,20 @@ h1, h2, h3 {
 
 h2 {
     margin-top: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.section {
+    background-color: white;
+    padding: 2rem;
 }
 
 label {
@@ -66,15 +74,11 @@ button {
     font-family: Arial, sans-serif;
 }
 
-#receipt, #sku {
+#show, #sku_output {
     background-color: #f9f9f9;
     padding: 1rem;
     border-left: 4px solid #0066cc;
     min-height: 200px;
-}
-
-#sku {
-    text-align: center;
 }
 
 p {
@@ -83,4 +87,10 @@ p {
 
 hr {
     border: 1px solid #ddd;
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
 }

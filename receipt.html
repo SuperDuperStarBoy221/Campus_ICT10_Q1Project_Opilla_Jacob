@@ -2,37 +2,23 @@
 <html>
 <head>
     <title>Receipt Generator</title>
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
-    <style>
-        body { font-family: Arial; background: #f0f0f0; margin: 0; }
-        nav { background: #333; color: white; padding: 1rem; }
-        nav a { color: white; margin-right: 2rem; text-decoration: none; }
-        nav a:hover { text-decoration: underline; }
-        .container { max-width: 800px; margin: 2rem auto; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        .section { background: white; padding: 2rem; }
-        h2 { margin-top: 0; }
-        label { display: block; margin: 0.8rem 0; cursor: pointer; }
-        label input { margin-right: 0.5rem; }
-        button { background: #0066cc; color: white; padding: 0.7rem 1.5rem; border: none; margin: 0.5rem 0.5rem 0.5rem 0; cursor: pointer; }
-        button:hover { background: #0052a3; }
-        #receipt { background: #f9f9f9; padding: 1rem; border-left: 4px solid #0066cc; min-height: 200px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav>
         <a href="index.html">Home</a>
-        <a href="receipt.html"><strong>Receipt Generator</strong></a>
+        <a href="receipt.html">Receipt Generator</a>
         <a href="sku.html">SKU Generator</a>
     </nav>
 
     <div class="container">
         <div class="section">
             <h2>Select Items</h2>
-            <label><input type="checkbox" id="item1" value="250"> Chicken - ₱250</label>
-            <label><input type="checkbox" id="item2" value="180"> Beef - ₱180</label>
-            <label><input type="checkbox" id="item3" value="150"> Fish - ₱150</label>
-            <label><input type="checkbox" id="item4" value="120"> Vegetables - ₱120</label>
-            <label><input type="checkbox" id="item5" value="95"> Rice - ₱95</label>
+            <label><input type="checkbox" id="item1" value="250"> Chicken - ₱250.00</label>
+            <label><input type="checkbox" id="item2" value="180"> Beef - ₱180.00</label>
+            <label><input type="checkbox" id="item3" value="150"> Fish - ₱150.00</label>
+            <label><input type="checkbox" id="item4" value="120"> Vegetables - ₱120.00</label>
+            <label><input type="checkbox" id="item5" value="95"> Rice - ₱95.00</label>
 
             <button onclick="createOrder()">Generate Receipt</button>
             <button onclick="clearReceipt()">Clear</button>
@@ -40,37 +26,44 @@
 
         <div class="section">
             <h2>Receipt</h2>
-            <div id="receipt"></div>
+            <div id="show"></div>
         </div>
     </div>
 
-    <py-script>
-def createOrder():
-    item1 = document.getElementById("item1")
-    item2 = document.getElementById("item2")
-    item3 = document.getElementById("item3")
-    item4 = document.getElementById("item4")
-    item5 = document.getElementById("item5")
+    <script>
+    function createOrder() {
+        const item1 = document.getElementById("item1");
+        const item2 = document.getElementById("item2");
+        const item3 = document.getElementById("item3");
+        const item4 = document.getElementById("item4");
+        const item5 = document.getElementById("item5");
 
-    subtotal = (float(item1.value) * item1.checked +
-                float(item2.value) * item2.checked +
-                float(item3.value) * item3.checked +
-                float(item4.value) * item4.checked +
-                float(item5.value) * item5.checked)
+        const subtotal = (parseFloat(item1.value) * item1.checked +
+                         parseFloat(item2.value) * item2.checked +
+                         parseFloat(item3.value) * item3.checked +
+                         parseFloat(item4.value) * item4.checked +
+                         parseFloat(item5.value) * item5.checked);
 
-    tax = subtotal * 0.12
-    total = subtotal + tax
+        const tax = subtotal * 0.12;
+        const total = subtotal + tax;
 
-    html = f"<h3>RECEIPT</h3><p>Subtotal: ₱{subtotal:.2f}</p><p>VAT (12%): ₱{tax:.2f}</p><hr><p><strong>TOTAL: ₱{total:.2f}</strong></p>"
-    document.getElementById("receipt").innerHTML = html
+        const html = `<h3>RECEIPT</h3>
+        <p>Subtotal: ₱${subtotal.toFixed(2)}</p>
+        <p>VAT (12%): ₱${tax.toFixed(2)}</p>
+        <hr>
+        <p><strong>TOTAL: ₱${total.toFixed(2)}</strong></p>`;
 
-def clearReceipt():
-    document.getElementById("item1").checked = False
-    document.getElementById("item2").checked = False
-    document.getElementById("item3").checked = False
-    document.getElementById("item4").checked = False
-    document.getElementById("item5").checked = False
-    document.getElementById("receipt").innerHTML = ""
-    </py-script>
+        document.getElementById("show").innerHTML = html;
+    }
+
+    function clearReceipt() {
+        document.getElementById("item1").checked = false;
+        document.getElementById("item2").checked = false;
+        document.getElementById("item3").checked = false;
+        document.getElementById("item4").checked = false;
+        document.getElementById("item5").checked = false;
+        document.getElementById("show").innerHTML = "";
+    }
+    </script>
 </body>
 </html>
