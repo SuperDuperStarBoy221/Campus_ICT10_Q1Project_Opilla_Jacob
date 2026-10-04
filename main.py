@@ -1,20 +1,4 @@
-# 1st Quarter Project - Receipt & SKU Generator
-"""
-A system to generate receipts with VAT calculation and create SKU codes for products.
-All 10 blanks are filled in this file.
-"""
 
-# BLANK ANSWERS:
-# 1. getElementById
-# 2. 'category'
-# 3. product_name = document.getElementById('product_input')
-# 4. (part of blank 3)
-# 5. stock_qty
-# 6. 'sku_output'
-# 7. subtotal
-# 8. * (multiplication)
-# 9. + (addition)
-# 10. innerHTML
 
 from pyscript import document
 
@@ -27,7 +11,7 @@ def create_order():
     prod4 = document.getElementById("item4")
     prod5 = document.getElementById("item5")
 
-    # Calculate subtotal by multiplying value by checked status (1 or 0)
+    # Calculate subtotal 
     subtotal = (float(prod1.value) * prod1.checked +
                 float(prod2.value) * prod2.checked +
                 float(prod3.value) * prod3.checked +
