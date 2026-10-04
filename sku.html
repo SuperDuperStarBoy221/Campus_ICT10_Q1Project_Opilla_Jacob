@@ -2,20 +2,33 @@
 <html>
 <head>
     <title>SKU Generator</title>
-    <link rel="stylesheet" href="style.css">
     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <style>
+        body { font-family: Arial; background: #f0f0f0; margin: 0; }
+        nav { background: #333; color: white; padding: 1rem; }
+        nav a { color: white; margin-right: 2rem; text-decoration: none; }
+        nav a:hover { text-decoration: underline; }
+        .container { max-width: 800px; margin: 2rem auto; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .section { background: white; padding: 2rem; }
+        h2 { margin-top: 0; }
+        label { display: block; margin: 1rem 0; font-weight: bold; }
+        input, select { width: 100%; padding: 0.5rem; margin-top: 0.3rem; border: 1px solid #ddd; }
+        button { background: #0066cc; color: white; padding: 0.7rem 1.5rem; border: none; margin: 0.5rem 0.5rem 0.5rem 0; cursor: pointer; }
+        button:hover { background: #0052a3; }
+        #sku { background: #f9f9f9; padding: 1rem; border-left: 4px solid #0066cc; min-height: 200px; text-align: center; }
+    </style>
 </head>
 <body>
     <nav>
         <a href="index.html">Home</a>
-        <a href="receipt.html">Receipt</a>
-        <a href="sku.html" class="active">SKU</a>
+        <a href="receipt.html">Receipt Generator</a>
+        <a href="sku.html"><strong>SKU Generator</strong></a>
     </nav>
 
-    <main>
-        <h2>SKU Generator</h2>
+    <div class="container">
+        <div class="section">
+            <h2>Create SKU</h2>
 
-        <div class="form">
             <label>Category:
                 <select id="category">
                     <option value="">-- Select --</option>
@@ -34,43 +47,36 @@
             <label>Stock Quantity:
                 <input type="number" id="quantity" placeholder="e.g., 100">
             </label>
+
+            <button onclick="generateSKU()">Generate SKU</button>
+            <button onclick="clearSKU()">Clear</button>
         </div>
 
-        <button onclick="SKU_generator()">Generate SKU</button>
-        <button onclick="clear_sku()">Clear</button>
-
-        <div id="sku_output"></div>
-    </main>
+        <div class="section">
+            <h2>SKU Code</h2>
+            <div id="sku"></div>
+        </div>
+    </div>
 
     <py-script>
-def SKU_generator():
-    document.getElementById('sku_output').innerHTML = ""
-    category = document.getElementById('category').value
-    product_name = document.getElementById('product_input').value
-    stock_qty = document.getElementById('quantity').value
+def generateSKU():
+    category = document.getElementById("category").value
+    product = document.getElementById("product_input").value
+    quantity = document.getElementById("quantity").value
 
-    if not category or not product_name or not stock_qty:
-        document.getElementById('sku_output').innerHTML = "<p style='color: red;'>Please fill in all fields</p>"
+    if not category or not product or not quantity:
+        document.getElementById("sku").innerHTML = "<p style='color: red;'>Fill all fields</p>"
         return
 
-    sku = category[:3].upper() + "-" + product_name[:4].upper() + "-" + str(stock_qty)
+    sku = category[:3].upper() + "-" + product[:4].upper() + "-" + quantity
+    html = f"<h3>{sku}</h3><p>Category: {category[:3].upper()}</p><p>Product: {product[:4].upper()}</p><p>Quantity: {quantity}</p>"
+    document.getElementById("sku").innerHTML = html
 
-    sku_display = f"""
-    <div class="sku">
-        <h3>Generated SKU:</h3>
-        <p style="font-size: 2em; font-weight: bold; font-family: monospace;">{sku}</p>
-        <p>Category: {category[:3].upper()}</p>
-        <p>Product: {product_name[:4].upper()}</p>
-        <p>Quantity: {stock_qty}</p>
-    </div>
-    """
-    document.getElementById('sku_output').innerHTML = sku_display
-
-def clear_sku():
-    document.getElementById('category').value = ""
-    document.getElementById('product_input').value = ""
-    document.getElementById('quantity').value = ""
-    document.getElementById('sku_output').innerHTML = ""
+def clearSKU():
+    document.getElementById("category").value = ""
+    document.getElementById("product_input").value = ""
+    document.getElementById("quantity").value = ""
+    document.getElementById("sku").innerHTML = ""
     </py-script>
 </body>
 </html>
