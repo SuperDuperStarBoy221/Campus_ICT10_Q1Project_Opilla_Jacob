@@ -1,136 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SKU Generator - RetailHub</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>SKU Generator</title>
+    <link rel="stylesheet" href="style.css">
     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <h1 class="logo">📦 RetailHub</h1>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="receipt.html">Receipt Generator</a></li>
-                <li><a href="sku.html" class="active">SKU Generator</a></li>
-            </ul>
-        </div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="receipt.html">Receipt</a>
+        <a href="sku.html" class="active">SKU</a>
     </nav>
 
-    <main class="container">
-        <section class="page-header">
-            <h1>🏷️ SKU Generator</h1>
-            <p>Create unique stock keeping units for your products</p>
-        </section>
+    <main>
+        <h2>SKU Generator</h2>
 
-        <div class="content-wrapper">
-            <section class="form-section">
-                <h2>Enter Product Information</h2>
+        <div class="form">
+            <label>Category:
+                <select id="category">
+                    <option value="">-- Select --</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Food">Food</option>
+                    <option value="Beverage">Beverage</option>
+                </select>
+            </label>
 
-                <div class="form-group">
-                    <label for="category">Product Category:</label>
-                    <select id="category" class="form-input">
-                        <option value="">-- Select Category --</option>
-                        <option value="Electronics">Electronics</option>
-                        <option value="Clothing">Clothing</option>
-                        <option value="Furniture">Furniture</option>
-                        <option value="Food">Food</option>
-                        <option value="Beverage">Beverage</option>
-                        <option value="Beauty">Beauty</option>
-                        <option value="Sports">Sports</option>
-                        <option value="Books">Books</option>
-                    </select>
-                </div>
+            <label>Product Name:
+                <input type="text" id="product_input" placeholder="e.g., Laptop">
+            </label>
 
-                <div class="form-group">
-                    <label for="product_input">Product Name:</label>
-                    <input type="text" id="product_input" class="form-input" placeholder="e.g., Laptop, T-Shirt, Chair">
-                </div>
+            <label>Stock Quantity:
+                <input type="number" id="quantity" placeholder="e.g., 100">
+            </label>
+        </div>
 
-                <div class="form-group">
-                    <label for="quantity">Stock Quantity:</label>
-                    <input type="number" id="quantity" class="form-input" placeholder="e.g., 100" min="1">
-                </div>
+        <button onclick="SKU_generator()">Generate SKU</button>
+        <button onclick="clear_sku()">Clear</button>
 
-                <py-script>
-from pyscript import display, document
+        <div id="sku_output"></div>
+    </main>
 
-def SKU_generator(e):
+    <py-script>
+def SKU_generator():
     document.getElementById('sku_output').innerHTML = ""
     category = document.getElementById('category').value
     product_name = document.getElementById('product_input').value
     stock_qty = document.getElementById('quantity').value
 
     if not category or not product_name or not stock_qty:
-        document.getElementById('sku_output').innerHTML = "<p style='color: red; font-weight: bold;'>❌ Please fill in all fields</p>"
+        document.getElementById('sku_output').innerHTML = "<p style='color: red;'>Please fill in all fields</p>"
         return
 
     sku = category[:3].upper() + "-" + product_name[:4].upper() + "-" + str(stock_qty)
 
     sku_display = f"""
-    <div class="sku-result">
-        <p style="margin-bottom: 10px; color: #666;">Generated SKU:</p>
-        <p style="font-size: 2em; font-weight: bold; color: #2c3e50; font-family: monospace; letter-spacing: 2px;">{sku}</p>
-        <hr>
-        <p><strong>Category Code:</strong> {category[:3].upper()}</p>
-        <p><strong>Product Code:</strong> {product_name[:4].upper()}</p>
-        <p><strong>Stock Quantity:</strong> {stock_qty}</p>
-        <p style="margin-top: 15px; font-size: 0.9em; color: #7f8c8d;">✅ SKU generated successfully!</p>
+    <div class="sku">
+        <h3>Generated SKU:</h3>
+        <p style="font-size: 2em; font-weight: bold; font-family: monospace;">{sku}</p>
+        <p>Category: {category[:3].upper()}</p>
+        <p>Product: {product_name[:4].upper()}</p>
+        <p>Quantity: {stock_qty}</p>
     </div>
     """
     document.getElementById('sku_output').innerHTML = sku_display
 
-def clear_sku(e):
+def clear_sku():
     document.getElementById('category').value = ""
     document.getElementById('product_input').value = ""
     document.getElementById('quantity').value = ""
     document.getElementById('sku_output').innerHTML = ""
-                </py-script>
-
-                <div class="button-group">
-                    <button id="generate-btn" class="btn btn-success" onclick="SKU_generator(event)">Generate SKU</button>
-                    <button id="clear-sku-btn" class="btn btn-secondary" onclick="clear_sku(event)">Clear</button>
-                </div>
-            </section>
-
-            <section class="sku-section">
-                <h2>Generated SKU</h2>
-                <div id="sku_output" class="sku-box">
-                    <p style="text-align: center; color: #999;">Your SKU will appear here...</p>
-                </div>
-            </section>
-        </div>
-
-        <section class="sku-info">
-            <h2>📚 How SKU Works</h2>
-            <div class="info-grid">
-                <div class="info-box">
-                    <h3>Format Structure</h3>
-                    <p>SKU = [Category (3)] - [Product Name (4)] - [Stock Qty]</p>
-                    <p style="font-size: 0.9em; color: #7f8c8d; margin-top: 10px;">
-                        Example: ELE-LAPT-100<br>
-                        ELE = Electronics<br>
-                        LAPT = Laptop<br>
-                        100 = Stock Quantity
-                    </p>
-                </div>
-                <div class="info-box">
-                    <h3>Benefits</h3>
-                    <ul style="text-align: left;">
-                        <li>✓ Easy product identification</li>
-                        <li>✓ Inventory tracking</li>
-                        <li>✓ Quick reordering</li>
-                        <li>✓ Prevents duplication</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 RetailHub. All rights reserved.</p>
-    </footer>
+    </py-script>
 </body>
 </html>

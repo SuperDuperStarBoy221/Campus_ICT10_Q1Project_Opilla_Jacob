@@ -1,69 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receipt Generator - RetailHub</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Receipt Generator</title>
+    <link rel="stylesheet" href="style.css">
     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <h1 class="logo">📦 RetailHub</h1>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="receipt.html" class="active">Receipt Generator</a></li>
-                <li><a href="sku.html">SKU Generator</a></li>
-            </ul>
-        </div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="receipt.html" class="active">Receipt</a>
+        <a href="sku.html">SKU</a>
     </nav>
 
-    <main class="container">
-        <section class="page-header">
-            <h1>🧾 Receipt Generator</h1>
-            <p>Select items from the menu below and generate your receipt</p>
-        </section>
+    <main>
+        <h2>Receipt Generator</h2>
 
-        <div class="content-wrapper">
-            <section class="form-section">
-                <h2>Select Menu Items</h2>
-                <div class="menu-items">
-                    <label class="menu-item">
-                        <input type="checkbox" id="item1" value="250.00">
-                        <span class="item-name">Grilled Chicken Breast</span>
-                        <span class="item-price">₱250.00</span>
-                    </label>
+        <div class="items">
+            <label>
+                <input type="checkbox" id="item1" value="250.00">
+                Grilled Chicken - ₱250.00
+            </label>
+            <label>
+                <input type="checkbox" id="item2" value="180.00">
+                Beef Steak - ₱180.00
+            </label>
+            <label>
+                <input type="checkbox" id="item3" value="150.00">
+                Fish Fillet - ₱150.00
+            </label>
+            <label>
+                <input type="checkbox" id="item4" value="120.00">
+                Vegetables - ₱120.00
+            </label>
+            <label>
+                <input type="checkbox" id="item5" value="95.00">
+                Rice Bowl - ₱95.00
+            </label>
+        </div>
 
-                    <label class="menu-item">
-                        <input type="checkbox" id="item2" value="180.00">
-                        <span class="item-name">Beef Steak with Gravy</span>
-                        <span class="item-price">₱180.00</span>
-                    </label>
+        <button onclick="create_order()">Generate Receipt</button>
+        <button onclick="clear_receipt()">Clear</button>
 
-                    <label class="menu-item">
-                        <input type="checkbox" id="item3" value="150.00">
-                        <span class="item-name">Fish Fillet (Fried)</span>
-                        <span class="item-price">₱150.00</span>
-                    </label>
+        <div id="show"></div>
+    </main>
 
-                    <label class="menu-item">
-                        <input type="checkbox" id="item4" value="120.00">
-                        <span class="item-name">Vegetable Stir-fry</span>
-                        <span class="item-price">₱120.00</span>
-                    </label>
-
-                    <label class="menu-item">
-                        <input type="checkbox" id="item5" value="95.00">
-                        <span class="item-name">Rice Bowl (Plain)</span>
-                        <span class="item-price">₱95.00</span>
-                    </label>
-                </div>
-
-                <py-script>
-from pyscript import display, document
-
-def create_order(e):
+    <py-script>
+def create_order():
     # Get input values
     prod1 = document.getElementById("item1")
     prod2 = document.getElementById("item2")
@@ -71,60 +53,37 @@ def create_order(e):
     prod4 = document.getElementById("item4")
     prod5 = document.getElementById("item5")
 
-    # Calculate total by multiplying value by checked status (1 or 0)
-    # Calculate subtotal, tax, and total
+    # Calculate subtotal
     subtotal = (float(prod1.value) * prod1.checked +
                 float(prod2.value) * prod2.checked +
                 float(prod3.value) * prod3.checked +
                 float(prod4.value) * prod4.checked +
                 float(prod5.value) * prod5.checked)
 
-    tax_rate = 0.12  # 12% VAT
+    # Calculate tax and total
+    tax_rate = 0.12
     tax = subtotal * tax_rate
     total = subtotal + tax
 
     receipt = f"""
-    <h3>==== RECEIPT ====</h3>
-    <hr>
-    <p><strong>Subtotal:</strong> ₱{subtotal:.2f}</p>
-    <p><strong>VAT (12%):</strong> ₱{tax:.2f}</p>
-    <hr>
-    <p><strong style="font-size: 1.2em;">TOTAL: ₱{total:.2f}</strong></p>
-    <hr>
-    <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
-        Thank you for your purchase!<br>
-        Generated on 2026-10-04
-    </p>
+    <div class="receipt">
+        <h3>==== RECEIPT ====</h3>
+        <p>Subtotal: ₱{subtotal:.2f}</p>
+        <p>VAT (12%): ₱{tax:.2f}</p>
+        <hr>
+        <p><strong>TOTAL: ₱{total:.2f}</strong></p>
+        <p style="font-size: 0.9em; margin-top: 15px;">Thank you!</p>
+    </div>
     """
     document.getElementById("show").innerHTML = receipt
 
-def clear_receipt(e):
-    document.getElementById("show").innerHTML = ""
-    # Clear all checkboxes
+def clear_receipt():
     document.getElementById("item1").checked = False
     document.getElementById("item2").checked = False
     document.getElementById("item3").checked = False
     document.getElementById("item4").checked = False
     document.getElementById("item5").checked = False
-                </py-script>
-
-                <div class="button-group">
-                    <button id="submit-btn" class="btn btn-success" onclick="create_order(event)">Generate Receipt</button>
-                    <button id="clear-btn" class="btn btn-secondary" onclick="clear_receipt(event)">Clear</button>
-                </div>
-            </section>
-
-            <section class="receipt-section">
-                <h2>Your Receipt</h2>
-                <div id="show" class="receipt-box">
-                    <p style="text-align: center; color: #999;">Your receipt will appear here...</p>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 RetailHub. All rights reserved.</p>
-    </footer>
+    document.getElementById("show").innerHTML = ""
+    </py-script>
 </body>
 </html>
